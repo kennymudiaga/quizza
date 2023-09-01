@@ -3,6 +3,11 @@ using Quizza.Users.WebApi.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add a local json file for developer-centric local settings
+builder.Configuration.AddJsonFile("appsettings.Local.json", optional: true);
+
+var conn = builder.Configuration.GetConnectionString("QuizzaUsers");
+
 // Add services to the container.
 builder.Services.AddDbContext<UserDbContext>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("QuizzaUsers")));
