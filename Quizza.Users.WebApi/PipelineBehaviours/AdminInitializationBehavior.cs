@@ -8,12 +8,12 @@ using Quizza.Users.WebApi.Infrastructure;
 
 namespace Quizza.Users.WebApi.PipelineBehaviours
 {
-    public class AdminInitializationPipelineBehaviour : IPipelineBehavior<SignUpCommand, Result<UserProfile>>
+    public class AdminInitializationBehavior : IPipelineBehavior<SignUpCommand, Result<UserProfile>>
     {
         private readonly InitializationOptions options;
         private readonly UserDbContext dbContext;
 
-        public AdminInitializationPipelineBehaviour(InitializationOptions options, UserDbContext dbContext)
+        public AdminInitializationBehavior(InitializationOptions options, UserDbContext dbContext)
         {
             this.options = options;
             this.dbContext = dbContext;

@@ -1,4 +1,4 @@
-﻿using FluentValidation.Results;
+﻿using System.Text.Json.Serialization;
 
 namespace Quizza.Common.Results
 {
@@ -7,6 +7,8 @@ namespace Quizza.Common.Results
         public virtual bool IsSuccess { get; set; }
         public string? Message { get; set; }
         public Dictionary<string, List<string>>? Errors { get; set; }
+
+        [JsonIgnore]
         public bool IsFailure => !IsSuccess;
 
         public static Result Success() => new() { IsSuccess = true };

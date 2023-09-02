@@ -14,7 +14,7 @@ public class UserProfileConfiguration : IEntityTypeConfiguration<UserProfile>
         builder.Property(x => x.OtherNames).HasMaxLength(50);
         builder.Property(x => x.Email).IsRequired().HasMaxLength(100);
         builder.HasIndex(x => x.Email).IsUnique();
-        builder.Property(x => x.Gender).HasMaxLength(6);
+        builder.Property(x => x.Gender).HasMaxLength(1);
         builder.Property(x => x.PasswordToken).HasMaxLength(10);
         builder.Property(x => x.Phone).HasMaxLength(20);
 

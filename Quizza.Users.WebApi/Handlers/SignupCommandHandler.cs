@@ -7,8 +7,9 @@ namespace Quizza.Users.WebApi.Handlers;
 
 public class SignupCommandHandler : IRequestHandler<SignUpCommand, Result<UserProfile>>
 {
-    public Task<Result<UserProfile>> Handle(SignUpCommand request, CancellationToken cancellationToken)
+    public async Task<Result<UserProfile>> Handle(SignUpCommand request, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        await Task.Delay(100, cancellationToken);
+        return new Success<UserProfile>();
     }
 }

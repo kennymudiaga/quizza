@@ -26,7 +26,7 @@ public record UserProfile
         Phone = model.Phone;
         DateCreated = DateTime.UtcNow;
         DateOfBirth = model.DateOfBirth;
-        Gender = model.Gender?.ToLower();
+        Gender = string.IsNullOrWhiteSpace(model.Gender) ? null : model.Gender.ToUpper();
     }
 
     public Guid Id { get; set; }
