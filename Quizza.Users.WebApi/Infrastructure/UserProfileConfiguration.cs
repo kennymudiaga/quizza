@@ -18,6 +18,6 @@ public class UserProfileConfiguration : IEntityTypeConfiguration<UserProfile>
         builder.Property(x => x.PasswordToken).HasMaxLength(10);
         builder.Property(x => x.Phone).HasMaxLength(20);
 
-        builder.HasMany<UserRole>("_roles");
+        builder.HasMany<UserRole>("_roles").WithOne().HasForeignKey(x => x.UserProfileId);
     }
 }

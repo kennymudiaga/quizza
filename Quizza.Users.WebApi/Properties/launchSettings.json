@@ -5,7 +5,8 @@
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ENVIRONMENT_OVERRIDE": "Local"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "http://localhost:5069"
@@ -15,7 +16,8 @@
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ENVIRONMENT_OVERRIDE": "Local"
       },
       "dotnetRunMessages": true,
       "applicationUrl": "https://localhost:7066;http://localhost:5069"
@@ -25,7 +27,8 @@
       "launchBrowser": true,
       "launchUrl": "swagger",
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ENVIRONMENT_OVERRIDE": "Local"
       }
     },
     "Docker": {
@@ -33,7 +36,8 @@
       "launchBrowser": true,
       "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
       "environmentVariables": {
-        "ASPNETCORE_URLS": "https://+:443;http://+:80"
+        "ASPNETCORE_URLS": "https://+:443;http://+:80",
+        "ENVIRONMENT_OVERRIDE": "Docker"
       },
       "publishAllPorts": true,
       "useSSL": true

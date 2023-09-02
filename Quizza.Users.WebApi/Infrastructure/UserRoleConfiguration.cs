@@ -8,7 +8,7 @@ namespace Quizza.Users.WebApi.Infrastructure
     {
         public void Configure(EntityTypeBuilder<UserRole> builder)
         {
-            builder.HasKey(r => new { r.UserId, r.Role });
+            builder.HasKey(r => new { r.UserProfileId, r.Role });
             builder.Property(r => r.Role).IsRequired().HasMaxLength(50);
         }
     }

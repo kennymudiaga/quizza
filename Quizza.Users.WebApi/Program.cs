@@ -13,8 +13,12 @@ using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add a local json file for developer-centric local settings
-builder.Configuration.AddJsonFile("appsettings.Local.json", optional: true);
+// Add a local ovverride json file for developer/environment-centric settings
+var preferredEnv = Environment.GetEnvironmentVariable("ENVIRONMENT_OVERRIDE");
+if (!string.IsNullOrWhiteSpace(preferredEnv))
+{
+    builder.Configuration.AddJsonFile($"appsettings.{preferredEnv}.json", optional: true);
+}
 
 // Add Options
 builder.Services.AddOptions();

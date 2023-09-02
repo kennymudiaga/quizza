@@ -6,6 +6,9 @@
       "serviceActions": {
         "quizza.users.webapi": "StartDebugging",
         "quizza-sql": "StartWithoutDebugging"
+      },
+      "environmentVariables": {
+        "ENVIRONMENT_OVERRIDE": "Docker"
       }
     }
   }
