@@ -4,7 +4,7 @@ using Quizza.Users.Domain.Models;
 
 namespace Quizza.Users.WebApi.Infrastructure;
 
-public class UserProfileEntityConfiguration : IEntityTypeConfiguration<UserProfile>
+public class UserProfileConfiguration : IEntityTypeConfiguration<UserProfile>
 {
     public void Configure(EntityTypeBuilder<UserProfile> builder)
     {
@@ -17,5 +17,7 @@ public class UserProfileEntityConfiguration : IEntityTypeConfiguration<UserProfi
         builder.Property(x => x.Gender).HasMaxLength(6);
         builder.Property(x => x.PasswordToken).HasMaxLength(10);
         builder.Property(x => x.Phone).HasMaxLength(20);
+
+        builder.HasMany<UserRole>("_roles");
     }
 }

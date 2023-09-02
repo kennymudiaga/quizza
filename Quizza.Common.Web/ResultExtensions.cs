@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Quizza.Common.Results;
 
 namespace Quizza.Common.Web;
@@ -19,8 +18,8 @@ public static class ResultExtensions
     {
         return result switch
         {
-            Unauthorized => new UnauthorizedObjectResult(result),
-            Forbidden => new ObjectResult(result) { StatusCode = StatusCodes.Status403Forbidden },
+            Unauthorized => new UnauthorizedResult(),
+            Forbidden => new ForbidResult(),
             { IsSuccess: true } => new NoContentResult(),
             { IsSuccess: false} => new BadRequestObjectResult(result),
             _ => new ConflictObjectResult(result),

@@ -12,8 +12,9 @@ public class UserDbContext : DbContext
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfigurationsFromAssembly(typeof(UserProfileEntityConfiguration).Assembly);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(UserProfileConfiguration).Assembly);
     }
 
     public DbSet<UserProfile> Users { get; set; }
+    public DbSet<UserRole> UserRoles { get; set; }
 }

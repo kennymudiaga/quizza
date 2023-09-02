@@ -11,6 +11,7 @@ public record UserProfile
     {
         Email = string.Empty;
         Id = Guid.NewGuid();
+        _roles = new();
     }
 
     public UserProfile(SignUpCommand model)
@@ -24,7 +25,7 @@ public record UserProfile
         OtherNames = model.OtherNames?.Trim().ToLower();
         Phone = model.Phone;
         DateCreated = DateTime.UtcNow;
-        DateOfBirth = model.DateOfBirth.GetValueOrDefault().Date;
+        DateOfBirth = model.DateOfBirth;
         Gender = model.Gender?.ToLower();
     }
 
@@ -45,11 +46,14 @@ public record UserProfile
     public Guid? CreatorId { get; set; }
     public string? Gender { get; protected set; }
     public DateTime? LastLogin { get; set; }
+    public DateTime? DateOfBirth { get; set; }
 
     public string Name => $"{FirstName}{MiddleNameOrSpace}{LastName}";
     private string MiddleNameOrSpace => string.IsNullOrWhiteSpace(OtherNames) ? " " : $" {OtherNames} ";
 
-    public DateTime DateOfBirth { get; set; }
+    private List<UserRole> _roles;
+
+    public IReadOnlyList<UserRole> Roles => _roles;    
 
     public bool IsPasswordTokenExpired() =>
         (!string.IsNullOrEmpty(PasswordToken)) &&
@@ -62,5 +66,14 @@ public record UserProfile
         PasswordToken = null;
         PasswordTokenExpiry = null;
         LastPasswordChange = DateTime.UtcNow;
+    }
+
+    public UserRole AddRole(string roleName)
+    {
+        var role = new UserRole(Id, roleName);
+        if (_roles.Any(r => r.Role.Equals(roleName, StringComparison.OrdinalIgnoreCase)))
+            throw new InvalidOperationException($"User already in role '{roleName}'");
+        _roles.Add(role);
+        return role;
     }
 }

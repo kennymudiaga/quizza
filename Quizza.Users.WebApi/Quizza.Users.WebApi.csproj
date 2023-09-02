@@ -26,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Quizza.Common.Web\Quizza.Common.Web.csproj" />
     <ProjectReference Include="..\Quizza.Users.Domain\Quizza.Users.Domain.csproj" />
   </ItemGroup>
 
