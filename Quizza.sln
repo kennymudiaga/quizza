@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Quizza.Users.WebApi", "Quiz
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{F15AC9D1-C9CE-42DF-BFE2-BBFC9033B2DF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Quizza.Users.Application", "Quizza.Users.Application\Quizza.Users.Application.csproj", "{A1E7BCFE-4121-4567-8DBD-27ED4F15C8E5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +45,10 @@ Global
 		{F15AC9D1-C9CE-42DF-BFE2-BBFC9033B2DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F15AC9D1-C9CE-42DF-BFE2-BBFC9033B2DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F15AC9D1-C9CE-42DF-BFE2-BBFC9033B2DF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A1E7BCFE-4121-4567-8DBD-27ED4F15C8E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A1E7BCFE-4121-4567-8DBD-27ED4F15C8E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A1E7BCFE-4121-4567-8DBD-27ED4F15C8E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A1E7BCFE-4121-4567-8DBD-27ED4F15C8E5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -52,6 +58,7 @@ Global
 		{742E53F5-667D-42A9-B0C1-014745689925} = {10B7A70A-AC93-4765-ABD1-FBCBDA462B23}
 		{0DEDD226-432F-4CDE-990D-234E681A68FA} = {70881540-782F-48ED-AAFF-14BE6CD5B0B1}
 		{B046307D-DA39-4D55-86C3-B4F38B8907A5} = {70881540-782F-48ED-AAFF-14BE6CD5B0B1}
+		{A1E7BCFE-4121-4567-8DBD-27ED4F15C8E5} = {70881540-782F-48ED-AAFF-14BE6CD5B0B1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {47E0BE8D-C604-4418-A43D-6893421875C8}

@@ -1,8 +1,7 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Quizza.Common.Web;
-using Quizza.Users.Domain.Commands;
+using Quizza.Users.Application.Commands;
 
 namespace Quizza.Users.WebApi.Controllers;
 

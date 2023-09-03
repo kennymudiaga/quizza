@@ -5,25 +5,26 @@ using Microsoft.EntityFrameworkCore;
 using Quizza.Common.PipelineBehaviours;
 using Quizza.Common.Results;
 using Quizza.Common.Web.Configuration;
-using Quizza.Users.Domain.Commands;
-using Quizza.Users.Domain.Models;
-using Quizza.Users.Domain.Validators;
-using Quizza.Users.WebApi.Infrastructure;
-using Quizza.Users.WebApi.PipelineBehaviours;
-using System.Reflection;
+using Quizza.Users.Application.Commands;
+using Quizza.Users.Domain.Models.Entities;
+using Quizza.Users.Application.Validators;
+using Quizza.Users.Application.Infrastructure;
+using Quizza.Users.Application.PipelineBehaviours;
+using Quizza.Users.Application.Config;
+using Quizza.Users.Application.Handlers;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add a local ovverride json file for developer/environment-centric settings
-var preferredEnv = Environment.GetEnvironmentVariable("ENVIRONMENT_OVERRIDE");
-if (!string.IsNullOrWhiteSpace(preferredEnv))
+// Add a local override json file for developer/environment-centric settings
+var overrideEnv = Environment.GetEnvironmentVariable("ENVIRONMENT_OVERRIDE");
+if (!string.IsNullOrWhiteSpace(overrideEnv))
 {
-    builder.Configuration.AddJsonFile($"appsettings.{preferredEnv}.json", optional: true);
+    builder.Configuration.AddJsonFile($"appsettings.{overrideEnv}.json", optional: true);
 }
 
 // Add Options
 builder.Services.AddOptions();
-builder.Services.ConfigureOptions(builder.Configuration, Assembly.GetExecutingAssembly());
+builder.Services.ConfigureOptions(builder.Configuration, typeof(InitializationOptions).Assembly);
 
 // Add services to the container.
 builder.Services.AddDbContext<UserDbContext>(
@@ -33,7 +34,7 @@ builder.Services.AddScoped<IPasswordHasher<UserProfile>, PasswordHasher<UserProf
 // Add mediator and mediator-pipeline-behaviors
 builder.Services.AddMediatR(config =>
 {
-    config.RegisterServicesFromAssemblies(Assembly.GetExecutingAssembly(), typeof(ValidationBehavior<,>).Assembly);
+    config.RegisterServicesFromAssemblies(typeof(SignupCommandHandler).Assembly);
 });
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 builder.Services.AddTransient<IPipelineBehavior<SignUpCommand, Result<UserProfile>>, SignUpEmailExistsBehavior>();
