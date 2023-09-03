@@ -18,7 +18,7 @@ public class SignUpEmailExistsBehavior : IPipelineBehavior<SignUpCommand, Result
 
     public async Task<Result<UserProfile>> Handle(SignUpCommand request, RequestHandlerDelegate<Result<UserProfile>> next, CancellationToken cancellationToken)
     {
-        var emailExists = await dbContext.Users.AnyAsync(u => u.Email ==  request.Email);
+        var emailExists = await dbContext.Users.AnyAsync(u => u.Email ==  request.Email, cancellationToken);
         return emailExists ?
             new Result<UserProfile> { Message = $"{request.Email} is already in use" } :
             await next();

@@ -1,5 +1,6 @@
 using FluentValidation;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Quizza.Common.PipelineBehaviours;
 using Quizza.Common.Results;
@@ -27,6 +28,7 @@ builder.Services.ConfigureOptions(builder.Configuration, Assembly.GetExecutingAs
 // Add services to the container.
 builder.Services.AddDbContext<UserDbContext>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("QuizzaUsers")));
+builder.Services.AddScoped<IPasswordHasher<UserProfile>, PasswordHasher<UserProfile>>();
 
 // Add mediator and mediator-pipeline-behaviors
 builder.Services.AddMediatR(config =>

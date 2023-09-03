@@ -7,5 +7,10 @@ public record Success : Result
 
 public record Success<T> : Result<T>
 {
+    public Success(T value)
+    {
+        Value = value;
+    }
+
     public override bool IsSuccess => true;
 }
