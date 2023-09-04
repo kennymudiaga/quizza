@@ -7,7 +7,6 @@ using Quizza.Users.Application.Commands;
 using Quizza.Users.Domain.Models;
 using AutoMapper;
 using JwtFactory;
-using Quizza.Users.Application.Extensions;
 using Quizza.Users.Application.Contracts;
 using Quizza.Users.Application.Options;
 

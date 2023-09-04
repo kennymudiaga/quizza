@@ -6,6 +6,6 @@ public record LoginResponse
     public string? Name { get; set; }
     public string? Email { get; set; }
     public string? Token { get; set; }
-    public string? Roles { get; set; }
+    public IReadOnlyList<string>? Roles { get; set; }
     public DateTime ExpiryDate { get; set; }
 };

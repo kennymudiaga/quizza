@@ -11,6 +11,6 @@ public class UserMappingProfile : Profile
     {
         CreateMap<SignUpCommand, SignUpRequest>();
         CreateMap<UserProfile, LoginResponse>()
-            .ForMember(x => x.Roles, cfg => cfg.MapFrom(src => string.Join(", ", src.Roles)));
+            .ForMember(x => x.Roles, cfg => cfg.MapFrom(src => src.Roles.Select(x => x.Role).ToList()));
     }
 }

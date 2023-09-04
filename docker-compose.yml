@@ -14,8 +14,6 @@ services:
 
   quizza.users.webapi:
     image: ${DOCKER_REGISTRY-}quizzauserswebapi
-    environment:
-      - ENVIRONMENT_OVERRIDE=Docker
     build:
       context: .
       dockerfile: Quizza.Users.WebApi/Dockerfile
