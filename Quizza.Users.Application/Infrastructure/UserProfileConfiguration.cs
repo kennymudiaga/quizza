@@ -19,5 +19,6 @@ public class UserProfileConfiguration : IEntityTypeConfiguration<UserProfile>
         builder.Property(x => x.Phone).HasMaxLength(20);
 
         builder.HasMany<UserRole>("_roles").WithOne().HasForeignKey(x => x.UserProfileId);
+        builder.Ignore(x => x.Roles);
     }
 }

@@ -109,12 +109,7 @@ namespace Quizza.Users.Application.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<Guid?>("UserProfileId1")
-                        .HasColumnType("uniqueidentifier");
-
                     b.HasKey("UserProfileId", "Role");
-
-                    b.HasIndex("UserProfileId1");
 
                     b.ToTable("UserRoles");
                 });
@@ -126,10 +121,6 @@ namespace Quizza.Users.Application.Migrations
                         .HasForeignKey("UserProfileId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("Quizza.Users.Domain.Models.UserProfile", null)
-                        .WithMany("Roles")
-                        .HasForeignKey("UserProfileId1");
                 });
 
             modelBuilder.Entity("Quizza.Users.Domain.Models.UserProfile", b =>

@@ -2,7 +2,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.OutputCaching;
 using Quizza.Common.Constants;
 using Quizza.Common.Web;
 using Quizza.Users.Application.Commands;
@@ -35,6 +34,13 @@ public class UsersController : ControllerBase
         CancellationToken cancellationToken)
     {
         var result = await mediator.Send(emailExistsQuery, cancellationToken);
+        return result.ToActionResult();
+    }
+
+    [HttpPost("login")]
+    public async Task<IActionResult> LoginAsync(LoginCommand loginCommand, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(loginCommand, cancellationToken); 
         return result.ToActionResult();
     }
 

@@ -34,9 +34,9 @@ public record UserProfile
     public string? OtherNames { get; protected set; }
     public string Email { get; protected set; }
     public string? Phone { get; protected set; }
-    public int AccessFailedCount { get; set; }
-    public bool IsAccountLocked { get; set; }
-    public DateTime? LockoutExpiry { get; set; }
+    public int AccessFailedCount { get; protected set; }
+    public bool IsAccountLocked { get; protected set; }
+    public DateTime? LockoutExpiry { get; protected set; }
     public DateTime DateCreated { get; protected set; }
     public DateTime? LastPasswordChange { get; protected set; }
     public string? PasswordToken { get; set; }
@@ -73,5 +73,15 @@ public record UserProfile
             throw new InvalidOperationException($"User already in role '{roleName}'");
         _roles.Add(role);
         return role;
+    }
+
+    public void LogAccessFailure(bool lockoutEnabled, int maxFailCount, int lockoutMinutes)
+    {
+        AccessFailedCount++;
+        if (AccessFailedCount >= maxFailCount)
+        {
+            IsAccountLocked = lockoutEnabled;
+            LockoutExpiry = DateTime.UtcNow.AddMinutes(lockoutMinutes);
+        }
     }
 }
