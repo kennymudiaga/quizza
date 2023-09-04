@@ -1,10 +1,10 @@
 ﻿using MediatR;
 using Quizza.Common.Results;
-using Quizza.Users.Domain.Models.Entities;
+using Quizza.Users.Domain.Models;
 
 namespace Quizza.Users.Application.Commands;
 
-public record SignUpCommand : IRequest<Result<UserProfile>>
+public record SignUpCommand : IRequest<Result<LoginResponse>>
 {
     public string? Email { get; set; }
     public string? Password { get; set; }

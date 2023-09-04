@@ -30,4 +30,8 @@
     <ProjectReference Include="..\Quizza.Users.Application\Quizza.Users.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ViewModels\" />
+  </ItemGroup>
+
 </Project>

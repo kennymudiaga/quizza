@@ -10,8 +10,11 @@ using Quizza.Users.Domain.Models.Entities;
 using Quizza.Users.Application.Validators;
 using Quizza.Users.Application.Infrastructure;
 using Quizza.Users.Application.PipelineBehaviours;
-using Quizza.Users.Application.Config;
+using Quizza.Users.Application.Options;
 using Quizza.Users.Application.Handlers;
+using JwtFactory;
+using Quizza.Users.Application.Mappers;
+using Quizza.Users.Domain.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +33,7 @@ builder.Services.ConfigureOptions(builder.Configuration, typeof(InitializationOp
 builder.Services.AddDbContext<UserDbContext>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("QuizzaUsers")));
 builder.Services.AddScoped<IPasswordHasher<UserProfile>, PasswordHasher<UserProfile>>();
+builder.Services.AddAutoMapper(typeof(Program), typeof(UserMappingProfile));
 
 // Add mediator and mediator-pipeline-behaviors
 builder.Services.AddMediatR(config =>
@@ -37,13 +41,17 @@ builder.Services.AddMediatR(config =>
     config.RegisterServicesFromAssemblies(typeof(SignupCommandHandler).Assembly);
 });
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-builder.Services.AddTransient<IPipelineBehavior<SignUpCommand, Result<UserProfile>>, SignUpEmailExistsBehavior>();
-builder.Services.AddTransient<IPipelineBehavior<SignUpCommand, Result<UserProfile>>, AdminInitializationBehavior>();
+builder.Services.AddTransient<IPipelineBehavior<SignUpCommand, Result<LoginResponse>>, SignUpEmailExistsBehavior>();
+builder.Services.AddTransient<IPipelineBehavior<SignUpCommand, Result<LoginResponse>>, AdminInitializationBehavior>();
 
 // Register Validators
 builder.Services.AddValidatorsFromAssembly(typeof(SignupCommandValidator).Assembly);
 
 builder.Services.AddControllers();
+
+// Configure Authentication with JwtProvider - from JwtFactory nuget
+builder.Services.AddJwtProvider(builder.Configuration.GetSection("JWT").Get<JwtInfo>());
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -60,6 +68,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

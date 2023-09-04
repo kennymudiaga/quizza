@@ -12,7 +12,7 @@ public record UserProfile
         _roles = new();
     }
 
-    public UserProfile(SignUpModel model)
+    public UserProfile(SignUpRequest model)
         : this()
     {
         FirstName = model.FirstName?.Trim().ToLower();
@@ -51,7 +51,7 @@ public record UserProfile
 
     private List<UserRole> _roles;
 
-    public IReadOnlyList<UserRole> Roles => _roles;
+    public IReadOnlyList<UserRole> Roles => _roles ?? new List<UserRole>();
 
     public bool IsPasswordTokenExpired() =>
         !string.IsNullOrEmpty(PasswordToken) &&

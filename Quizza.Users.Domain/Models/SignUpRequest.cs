@@ -1,6 +1,6 @@
 ﻿namespace Quizza.Users.Domain.Models;
 
-public record SignUpModel
+public record SignUpRequest
 {
     public string? Email { get; set; }
     public string? Password { get; set; }

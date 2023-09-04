@@ -1,25 +1,36 @@
 ﻿using MediatR;
 using Quizza.Common.Results;
 using Quizza.Users.Application.Commands;
-using Quizza.Users.Domain.Models.Entities;
-using Quizza.Users.Application.Config;
+using Quizza.Users.Application.Options;
 using Quizza.Users.Application.Constants;
 using Quizza.Users.Application.Infrastructure;
+using Quizza.Users.Domain.Models;
+using Microsoft.EntityFrameworkCore;
+using JwtFactory;
+using AutoMapper;
+using Quizza.Users.Application.Extensions;
+using Quizza.Users.Application.Contracts;
 
 namespace Quizza.Users.Application.PipelineBehaviours
 {
-    public class AdminInitializationBehavior : IPipelineBehavior<SignUpCommand, Result<UserProfile>>
+    public class AdminInitializationBehavior : LoginManager, IPipelineBehavior<SignUpCommand, Result<LoginResponse>>
     {
         private readonly InitializationOptions options;
         private readonly UserDbContext dbContext;
 
-        public AdminInitializationBehavior(InitializationOptions options, UserDbContext dbContext)
+        public AdminInitializationBehavior(
+            UserDbContext dbContext,
+            JwtProvider jwtProvider,
+            IMapper mapper,                                           
+            InitializationOptions initializationOptions,                                           
+            UserPolicyOptions userPolicyOptions)
+            :base(jwtProvider, mapper, userPolicyOptions)
         {
-            this.options = options;
             this.dbContext = dbContext;
+            options = initializationOptions;
         }
 
-        public async Task<Result<UserProfile>> Handle(SignUpCommand request, RequestHandlerDelegate<Result<UserProfile>> next, CancellationToken cancellationToken)
+        public async Task<Result<LoginResponse>> Handle(SignUpCommand request, RequestHandlerDelegate<Result<LoginResponse>> next, CancellationToken cancellationToken)
         {
             // Run the normal handler and get the result
             var userResult = await next.Invoke();
@@ -34,9 +45,19 @@ namespace Quizza.Users.Application.PipelineBehaviours
                 return userResult;
 
             // If we got here - this user should be configured for admin roles
-            // TODO: Save changes to dbContext
-            userResult.Value.AddRole(Roles.Admin);
-            return userResult;
+            var userProfile = await dbContext.Users.Include("_roles")
+                .FirstOrDefaultAsync(x => x.Id == userResult.Value.Id, cancellationToken);
+
+            if (userProfile is null)
+            {
+                return userResult;
+            }
+
+            userProfile.AddRole(Roles.Admin);
+            await dbContext.SaveChangesAsync(cancellationToken);
+
+            // Regenerate the auth token            
+            return userResult with { Value = CreateLogin(userProfile) };
         }
     }
 }

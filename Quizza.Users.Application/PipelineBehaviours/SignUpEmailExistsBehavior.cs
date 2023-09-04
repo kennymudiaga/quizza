@@ -2,12 +2,12 @@
 using Microsoft.EntityFrameworkCore;
 using Quizza.Common.Results;
 using Quizza.Users.Application.Commands;
-using Quizza.Users.Domain.Models.Entities;
 using Quizza.Users.Application.Infrastructure;
+using Quizza.Users.Domain.Models;
 
 namespace Quizza.Users.Application.PipelineBehaviours;
 
-public class SignUpEmailExistsBehavior : IPipelineBehavior<SignUpCommand, Result<UserProfile>>
+public class SignUpEmailExistsBehavior : IPipelineBehavior<SignUpCommand, Result<LoginResponse>>
 {
     private readonly UserDbContext dbContext;
 
@@ -16,11 +16,11 @@ public class SignUpEmailExistsBehavior : IPipelineBehavior<SignUpCommand, Result
         this.dbContext = dbContext;
     }
 
-    public async Task<Result<UserProfile>> Handle(SignUpCommand request, RequestHandlerDelegate<Result<UserProfile>> next, CancellationToken cancellationToken)
+    public async Task<Result<LoginResponse>> Handle(SignUpCommand request, RequestHandlerDelegate<Result<LoginResponse>> next, CancellationToken cancellationToken)
     {
         var emailExists = await dbContext.Users.AnyAsync(u => u.Email ==  request.Email, cancellationToken);
         return emailExists ?
-            new Result<UserProfile> { Message = $"{request.Email} is already in use" } :
+            new Result<LoginResponse> { Message = $"{request.Email} is already in use" } :
             await next();
     }
 }

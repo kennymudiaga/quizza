@@ -8,7 +8,7 @@ public static class OptionsExtensions
 {
     public static IServiceCollection ConfigureOptions(this IServiceCollection services, IConfiguration configuration, Assembly assembly)
     {
-        var options = assembly.GetTypes().Where(t => t.IsAssignableTo(typeof(OptionBase))).ToList();
+        var options = assembly.GetTypes().Where(t => t.IsAssignableTo(typeof(OptionsBase))).ToList();
         foreach (var optionType in options)
         {
             var attribute = optionType.GetCustomAttribute<ConfigSectionNameAttribute>();

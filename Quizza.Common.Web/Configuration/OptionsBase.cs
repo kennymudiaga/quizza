@@ -1,6 +1,6 @@
 ﻿namespace Quizza.Common.Web.Configuration;
 
-public abstract class OptionBase
+public abstract class OptionsBase
 {
 
 }
