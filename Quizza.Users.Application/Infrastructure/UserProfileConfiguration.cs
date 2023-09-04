@@ -20,5 +20,6 @@ public class UserProfileConfiguration : IEntityTypeConfiguration<UserProfile>
 
         builder.HasMany<UserRole>("_roles").WithOne().HasForeignKey(x => x.UserProfileId);
         builder.Ignore(x => x.Roles);
+        builder.Ignore(x => x.IsAccountLocked);
     }
 }

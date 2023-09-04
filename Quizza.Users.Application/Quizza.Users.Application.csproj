@@ -31,4 +31,8 @@
     <ProjectReference Include="..\Quizza.Users.Domain\Quizza.Users.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>

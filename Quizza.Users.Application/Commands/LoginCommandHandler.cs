@@ -4,7 +4,9 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Quizza.Common.Results;
+using Quizza.Users.Application.Constants;
 using Quizza.Users.Application.Contracts;
+using Quizza.Users.Application.Extensions;
 using Quizza.Users.Application.Infrastructure;
 using Quizza.Users.Application.Options;
 using Quizza.Users.Domain.Models;
@@ -33,40 +35,17 @@ public class LoginCommandHandler : LoginManager, IRequestHandler<LoginCommand, R
     {
         var userProfile = await userDbContext.Users.Include("_roles")
             .FirstOrDefaultAsync(x => x.Email == request.Email, cancellationToken);
-        if (userProfile == null)
-        {
-            return new Failure("Invalid email or password");
-        }
-        else if(userProfile.IsAccountLocked && userProfile.LockoutExpiry > DateTime.UtcNow)
-        {
-            var lockoutMinutes = (userProfile.LockoutExpiry!.Value - DateTime.UtcNow).TotalMinutes;
-            return new Failure($"Account Locked: please retry in {Math.Ceiling(lockoutMinutes):N0} minutes");
-        }
-        else if (string.IsNullOrWhiteSpace(userProfile.PasswordHash))
-        {
-            return new Failure("Password setup or reset required");
-        }
 
-        var passwordResult = passwordHasher.VerifyHashedPassword(userProfile, userProfile.PasswordHash, request.Password!);
-        if (passwordResult == PasswordVerificationResult.Failed)
-        {
-            userProfile.LogAccessFailure(UserPolicy.EnableLockout, UserPolicy.MaxPasswordFailCount, UserPolicy.PasswordLockoutDuration);
-            userDbContext.Update(userProfile);
-            await userDbContext.SaveChangesAsync(CancellationToken.None);
-            if (UserPolicy.EnableLockout)
-            {
-                if (userProfile.IsAccountLocked)
-                {
-                    var lockoutMinutes = (userProfile.LockoutExpiry!.Value - DateTime.UtcNow).TotalMinutes;
-                    return new Failure($"Account Locked: please retry in {Math.Ceiling(lockoutMinutes):N0} minutes");
-                }
+        if (userProfile is null)
+            return new Failure(LoginErrors.InvalidLoginAttempt);
 
-                return new Failure($"Invalid email or password: {UserPolicy.MaxPasswordFailCount - userProfile.AccessFailedCount} attempts remaining.");
-            }
+        var (success, message) = passwordHasher.CheckPassword(userProfile, UserPolicy, request.Password ?? "");
 
-            return new Failure("Invalid email or password");
-        }
+        userDbContext.Update(userProfile);
+        await userDbContext.SaveChangesAsync(cancellationToken);
 
-        return new Success<LoginResponse>(CreateLogin(userProfile));
+        return success?  
+            new Success<LoginResponse>(CreateLogin(userProfile)) :
+            new Failure(message);
     }
 }

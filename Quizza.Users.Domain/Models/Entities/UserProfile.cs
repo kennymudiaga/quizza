@@ -34,8 +34,7 @@ public record UserProfile
     public string? OtherNames { get; protected set; }
     public string Email { get; protected set; }
     public string? Phone { get; protected set; }
-    public int AccessFailedCount { get; protected set; }
-    public bool IsAccountLocked { get; protected set; }
+    public int AccessFailedCount { get; protected set; }    
     public DateTime? LockoutExpiry { get; protected set; }
     public DateTime DateCreated { get; protected set; }
     public DateTime? LastPasswordChange { get; protected set; }
@@ -43,8 +42,10 @@ public record UserProfile
     public DateTime? PasswordTokenExpiry { get; set; }
     public Guid? CreatorId { get; set; }
     public string? Gender { get; protected set; }
-    public DateTime? LastLogin { get; set; }
+    public DateTime? LastLogin { get; protected set; }
     public DateTime? DateOfBirth { get; set; }
+
+    public bool IsAccountLocked => LockoutExpiry.HasValue && LockoutExpiry.Value > DateTime.UtcNow;
 
     public string Name => $"{FirstName}{MiddleNameOrSpace}{LastName}";
     private string MiddleNameOrSpace => string.IsNullOrWhiteSpace(OtherNames) ? " " : $" {OtherNames} ";
@@ -80,8 +81,14 @@ public record UserProfile
         AccessFailedCount++;
         if (AccessFailedCount >= maxFailCount)
         {
-            IsAccountLocked = lockoutEnabled;
-            LockoutExpiry = DateTime.UtcNow.AddMinutes(lockoutMinutes);
+            LockoutExpiry = lockoutEnabled ? DateTime.UtcNow.AddMinutes(lockoutMinutes) : null;
         }
+    }
+
+    public void LogAccessSuccess()
+    {
+        LastLogin = DateTime.UtcNow;
+        AccessFailedCount = 0;
+        LockoutExpiry = null;
     }
 }

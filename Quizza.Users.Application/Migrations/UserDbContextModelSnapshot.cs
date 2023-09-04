@@ -22,7 +22,7 @@ namespace Quizza.Users.Application.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Quizza.Users.Domain.Models.UserProfile", b =>
+            modelBuilder.Entity("Quizza.Users.Domain.Models.Entities.UserProfile", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -53,9 +53,6 @@ namespace Quizza.Users.Application.Migrations
                     b.Property<string>("Gender")
                         .HasMaxLength(1)
                         .HasColumnType("nvarchar(1)");
-
-                    b.Property<bool>("IsAccountLocked")
-                        .HasColumnType("bit");
 
                     b.Property<DateTime?>("LastLogin")
                         .HasColumnType("datetime2");
@@ -97,7 +94,7 @@ namespace Quizza.Users.Application.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Quizza.Users.Domain.Models.UserRole", b =>
+            modelBuilder.Entity("Quizza.Users.Domain.Models.Entities.UserRole", b =>
                 {
                     b.Property<Guid>("UserProfileId")
                         .HasColumnType("uniqueidentifier");
@@ -111,19 +108,17 @@ namespace Quizza.Users.Application.Migrations
                     b.ToTable("UserRoles");
                 });
 
-            modelBuilder.Entity("Quizza.Users.Domain.Models.UserRole", b =>
+            modelBuilder.Entity("Quizza.Users.Domain.Models.Entities.UserRole", b =>
                 {
-                    b.HasOne("Quizza.Users.Domain.Models.UserProfile", null)
+                    b.HasOne("Quizza.Users.Domain.Models.Entities.UserProfile", null)
                         .WithMany("_roles")
                         .HasForeignKey("UserProfileId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Quizza.Users.Domain.Models.UserProfile", b =>
+            modelBuilder.Entity("Quizza.Users.Domain.Models.Entities.UserProfile", b =>
                 {
-                    b.Navigation("Roles");
-
                     b.Navigation("_roles");
                 });
 #pragma warning restore 612, 618
