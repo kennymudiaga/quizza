@@ -11,7 +11,6 @@ using Quizza.Users.Application.Validators;
 using Quizza.Users.Application.Infrastructure;
 using Quizza.Users.Application.PipelineBehaviours;
 using Quizza.Users.Application.Options;
-using Quizza.Users.Application.Handlers;
 using JwtFactory;
 using Quizza.Users.Application.Mappers;
 using Quizza.Users.Domain.Models;
@@ -38,16 +37,19 @@ builder.Services.AddAutoMapper(typeof(Program), typeof(UserMappingProfile));
 // Add mediator and mediator-pipeline-behaviors
 builder.Services.AddMediatR(config =>
 {
-    config.RegisterServicesFromAssemblies(typeof(SignupCommandHandler).Assembly);
+    config.RegisterServicesFromAssemblies(typeof(SignUpCommandHandler).Assembly);
 });
 builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 builder.Services.AddTransient<IPipelineBehavior<SignUpCommand, Result<LoginResponse>>, SignUpEmailExistsBehavior>();
 builder.Services.AddTransient<IPipelineBehavior<SignUpCommand, Result<LoginResponse>>, AdminInitializationBehavior>();
 
 // Register Validators
-builder.Services.AddValidatorsFromAssembly(typeof(SignupCommandValidator).Assembly);
+builder.Services.AddValidatorsFromAssembly(typeof(SignUpCommandValidator).Assembly);
 
+builder.Services.AddResponseCaching();
+builder.Services.AddOutputCache();
 builder.Services.AddControllers();
+
 
 // Configure Authentication with JwtProvider - from JwtFactory nuget
 builder.Services.AddJwtProvider(builder.Configuration.GetSection("JWT").Get<JwtInfo>());
@@ -70,6 +72,12 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+// UseCors must be called before UseResponseCaching
+//app.UseCors();
+
+app.UseResponseCaching();
+app.UseOutputCache();
 
 app.MapControllers();
 

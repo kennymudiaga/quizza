@@ -3,24 +3,23 @@ using Microsoft.AspNetCore.Identity;
 using Quizza.Common.Results;
 using Quizza.Users.Domain.Models.Entities;
 using Quizza.Users.Application.Infrastructure;
-using Quizza.Users.Application.Commands;
 using Quizza.Users.Domain.Models;
 using AutoMapper;
 using JwtFactory;
 using Quizza.Users.Application.Contracts;
 using Quizza.Users.Application.Options;
 
-namespace Quizza.Users.Application.Handlers;
+namespace Quizza.Users.Application.Commands;
 
-public class SignupCommandHandler : LoginManager, IRequestHandler<SignUpCommand, Result<LoginResponse>>
+public class SignUpCommandHandler : LoginManager, IRequestHandler<SignUpCommand, Result<LoginResponse>>
 {
     private readonly UserDbContext dbContext;
     private readonly IPasswordHasher<UserProfile> passwordHasher;
     private readonly IMapper mapper;
     private readonly JwtProvider jwtProvider;
 
-    public SignupCommandHandler(UserDbContext dbContext, 
-        IPasswordHasher<UserProfile> passwordHasher, 
+    public SignUpCommandHandler(UserDbContext dbContext,
+        IPasswordHasher<UserProfile> passwordHasher,
         IMapper mapper,
         JwtProvider jwtProvider,
         UserPolicyOptions userPolicyOptions)
@@ -39,7 +38,7 @@ public class SignupCommandHandler : LoginManager, IRequestHandler<SignUpCommand,
         {
             user.SetPassword(passwordHasher.HashPassword(user, request.Password));
         }
-        
+
         dbContext.Add(user);
         await dbContext.SaveChangesAsync(cancellationToken);
 

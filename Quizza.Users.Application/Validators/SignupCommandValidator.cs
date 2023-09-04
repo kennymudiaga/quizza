@@ -3,10 +3,10 @@ using Quizza.Users.Application.Commands;
 
 namespace Quizza.Users.Application.Validators;
 
-public class SignupCommandValidator : AbstractValidator<SignUpCommand>
+public class SignUpCommandValidator : AbstractValidator<SignUpCommand>
 {
     private static readonly string[] genders = { "F", "M" };
-    public SignupCommandValidator()
+    public SignUpCommandValidator()
     {
         RuleFor(x => x.Email).NotEmpty()
             .EmailAddress().MaximumLength(100);
