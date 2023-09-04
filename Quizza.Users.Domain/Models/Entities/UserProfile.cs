@@ -1,4 +1,6 @@
-﻿namespace Quizza.Users.Domain.Models.Entities;
+﻿using Quizza.Users.Domain.Constants;
+
+namespace Quizza.Users.Domain.Models.Entities;
 
 public record UserProfile
 {
@@ -18,8 +20,8 @@ public record UserProfile
         FirstName = model.FirstName?.Trim().ToLower();
         LastName = model.LastName?.Trim().ToLower();
         if (string.IsNullOrEmpty(model.Email))
-            throw new ArgumentException("Email cannot be empty!");
-        Email = model.Email!.Trim().ToLower();
+            throw new ArgumentException(ModelErrors.EmptyEmail);
+        Email = model.Email.Trim().ToLower();
         OtherNames = model.OtherNames?.Trim().ToLower();
         Phone = model.Phone;
         DateCreated = DateTime.UtcNow;

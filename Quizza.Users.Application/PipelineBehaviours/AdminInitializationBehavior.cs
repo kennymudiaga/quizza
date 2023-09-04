@@ -8,7 +8,6 @@ using Quizza.Users.Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using JwtFactory;
 using AutoMapper;
-using Quizza.Users.Application.Extensions;
 using Quizza.Users.Application.Contracts;
 
 namespace Quizza.Users.Application.PipelineBehaviours
