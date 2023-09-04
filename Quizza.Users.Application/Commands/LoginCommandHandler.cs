@@ -41,8 +41,8 @@ public class LoginCommandHandler : LoginManager, IRequestHandler<LoginCommand, R
 
         var (success, message) = passwordHasher.CheckPassword(userProfile, UserPolicy, request.Password ?? "");
 
-        userDbContext.Update(userProfile);
-        await userDbContext.SaveChangesAsync(cancellationToken);
+        if (userDbContext.Entry(userProfile).State == EntityState.Modified)
+            await userDbContext.SaveChangesAsync(CancellationToken.None);
 
         return success?  
             new Success<LoginResponse>(CreateLogin(userProfile)) :

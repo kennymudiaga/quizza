@@ -6,6 +6,7 @@ using Quizza.Common.Constants;
 using Quizza.Common.Web;
 using Quizza.Users.Application.Commands;
 using Quizza.Users.Application.Queries;
+using Quizza.Users.WebApi.ViewModels;
 
 namespace Quizza.Users.WebApi.Controllers;
 
@@ -41,6 +42,20 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> LoginAsync(LoginCommand loginCommand, CancellationToken cancellationToken)
     {
         var result = await mediator.Send(loginCommand, cancellationToken); 
+        return result.ToActionResult();
+    }
+
+    [HttpPut("password")]
+    [Authorize]
+    public async Task<IActionResult> ChangePasswordAsync(ChangePasswordModel changePasswordModel, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(new ChangePasswordCommand
+        {
+            ConfirmPassword = changePasswordModel.ConfirmPassword,
+            OldPassword = changePasswordModel.OldPassword,
+            Password = changePasswordModel.Password,
+            UserId = Guid.Parse(User.GetUserId()),
+        }, cancellationToken);
         return result.ToActionResult();
     }
 
