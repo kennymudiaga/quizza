@@ -3,9 +3,9 @@ using Quizza.Users.Application.Commands;
 
 namespace Quizza.Users.Application.Validators;
 
-public class ResetPasswordCommandValidator : AbstractValidator<ResetPasswordCommand>
+public class ForgotPasswordCommandValidator : AbstractValidator<ForgotPasswordCommand>
 {
-    public ResetPasswordCommandValidator()
+    public ForgotPasswordCommandValidator()
     {
         RuleFor(x => x.Email).NotEmpty().EmailAddress().MaximumLength(50);
     }

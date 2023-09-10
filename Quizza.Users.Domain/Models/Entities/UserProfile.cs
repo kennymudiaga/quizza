@@ -40,8 +40,8 @@ public record UserProfile
     public DateTime? LockoutExpiry { get; protected set; }
     public DateTime DateCreated { get; protected set; }
     public DateTime? LastPasswordChange { get; protected set; }
-    public string? PasswordToken { get; set; }
-    public DateTime? PasswordTokenExpiry { get; set; }
+    public string? PasswordToken { get; protected set; }
+    public DateTime? PasswordTokenExpiry { get; protected set; }
     public Guid? CreatorId { get; set; }
     public string? Gender { get; protected set; }
     public DateTime? LastLogin { get; protected set; }
@@ -56,7 +56,7 @@ public record UserProfile
 
     public IReadOnlyList<UserRole> Roles => _roles ?? new List<UserRole>();
 
-    public bool IsPasswordTokenExpired() =>
+    public bool IsPasswordTokenExpired =>
         !string.IsNullOrEmpty(PasswordToken) &&
         PasswordTokenExpiry.HasValue &&
         DateTime.UtcNow > PasswordTokenExpiry;
@@ -67,6 +67,15 @@ public record UserProfile
         PasswordToken = null;
         PasswordTokenExpiry = null;
         LastPasswordChange = DateTime.UtcNow;
+
+        // Unlock account
+        LockoutExpiry = null;
+    }
+
+    public void SetPasswordToken(string token, int expiryMinutes)
+    {
+        PasswordToken = token;
+        PasswordTokenExpiry = DateTime.UtcNow.AddMinutes(expiryMinutes);
     }
 
     public UserRole AddRole(string roleName)

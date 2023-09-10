@@ -59,6 +59,20 @@ public class UsersController : ControllerBase
         return result.ToActionResult();
     }
 
+    [HttpPost("forgot-password")]
+    public async Task<IActionResult> ForgotPasswordAsync(ForgotPasswordCommand resetPasswordCommand, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(resetPasswordCommand, cancellationToken);
+        return result.ToActionResult();
+    }
+
+    [HttpPost("password")]
+    public async Task<IActionResult> SetPassordAsync(SetPasswordCommand setPasswordCommand, CancellationToken cancellationToken)
+    {
+        var result = await mediator.Send(setPasswordCommand, cancellationToken);
+        return result.ToActionResult();
+    }
+
     [HttpGet("demo-auth")]
     [Authorize]
     public IActionResult DemoAuth()

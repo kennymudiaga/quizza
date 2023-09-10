@@ -14,6 +14,8 @@ using Quizza.Users.Application.Options;
 using JwtFactory;
 using Quizza.Users.Application.Mappers;
 using Quizza.Users.Domain.Models;
+using Feral.SmtpMailer;
+using Feral.Mailer.Config;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,7 +28,9 @@ if (!string.IsNullOrWhiteSpace(overrideEnv))
 
 // Add Options
 builder.Services.AddOptions();
-builder.Services.ConfigureOptions(builder.Configuration, typeof(InitializationOptions).Assembly);
+builder.Services.ConfigureOptions(builder.Configuration, 
+    typeof(InitializationOptions).Assembly,
+    typeof(AppInfoOptions).Assembly);
 
 // Add services to the container.
 builder.Services.AddDbContext<UserDbContext>(
@@ -53,6 +57,14 @@ builder.Services.AddControllers();
 
 // Configure Authentication with JwtProvider - from JwtFactory nuget
 builder.Services.AddJwtProvider(builder.Configuration.GetSection("JWT").Get<JwtInfo>());
+
+// Configure SMPT mailer
+var smtpCredentials = builder.Configuration.GetSection("Smtp").Get<SmtpCredentials>();
+var emailTemplateConfig = new EmailTemplateConfig
+{
+    Path = Path.Combine(builder.Environment.ContentRootPath, "EmailTemplates")
+};
+builder.Services.AddSmtpMailer(smtpCredentials, emailTemplateConfig);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

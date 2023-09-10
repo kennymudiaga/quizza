@@ -37,7 +37,7 @@ public class LoginCommandHandler : LoginManager, IRequestHandler<LoginCommand, R
             .FirstOrDefaultAsync(x => x.Email == request.Email, cancellationToken);
 
         if (userProfile is null)
-            return new Failure(LoginErrors.InvalidLoginAttempt);
+            return new Failure(LoginErrors.InvalidCredentials);
 
         var (success, message) = passwordHasher.CheckPassword(userProfile, UserPolicy, request.Password ?? "");
 

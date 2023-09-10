@@ -36,7 +36,7 @@ internal static class PasswordHasherExtensions
         }            
 
         if (userPolicy.EnableLockout is false)
-            return (false, LoginErrors.InvalidLoginAttempt);
+            return (false, LoginErrors.InvalidCredentials);
 
         userProfile.LogAccessFailure(true, userPolicy.MaxPasswordFailCount, userPolicy.PasswordLockoutDuration);
 

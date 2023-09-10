@@ -34,7 +34,7 @@ namespace Quizza.Users.Application.Commands
         {
             var userProfile = await dbContext.Users.FirstOrDefaultAsync(user => user.Id == request.UserId, cancellationToken);
             if (userProfile == null)
-                return new Failure(LoginErrors.InvalidLoginAttempt);
+                return new Failure(LoginErrors.InvalidCredentials);
 
             var (success, message) = passwordHasher.CheckPassword(userProfile, UserPolicy, request.OldPassword ?? "");
             
