@@ -42,10 +42,14 @@ builder.Services.AddAutoMapper(typeof(Program), typeof(UserMappingProfile));
 builder.Services.AddMediatR(config =>
 {
     config.RegisterServicesFromAssemblies(typeof(SignUpCommandHandler).Assembly);
+    config.Lifetime = ServiceLifetime.Scoped;
 });
-builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-builder.Services.AddTransient<IPipelineBehavior<SignUpCommand, Result<LoginResponse>>, SignUpEmailExistsBehavior>();
-builder.Services.AddTransient<IPipelineBehavior<SignUpCommand, Result<LoginResponse>>, AdminInitializationBehavior>();
+
+// Add pipeline behaviours - in order of execution
+builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+builder.Services.AddScoped<IPipelineBehavior<SignUpCommand, Result<LoginResponse>>, SignUpEmailExistsBehavior>();
+builder.Services.AddScoped<IPipelineBehavior<SignUpCommand, Result<LoginResponse>>, AdminInitializationBehavior>();
+
 
 // Register Validators
 builder.Services.AddValidatorsFromAssembly(typeof(SignUpCommandValidator).Assembly);

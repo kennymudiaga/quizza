@@ -72,11 +72,4 @@ public class UsersController : ControllerBase
         var result = await mediator.Send(setPasswordCommand, cancellationToken);
         return result.ToActionResult();
     }
-
-    [HttpGet("demo-auth")]
-    [Authorize]
-    public IActionResult DemoAuth()
-    {
-        return Ok(new { User.Identity?.Name, Id = User.GetUserId() });
-    }
 }
